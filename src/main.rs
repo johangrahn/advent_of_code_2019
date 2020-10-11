@@ -1,13 +1,11 @@
-use std::{collections::HashMap, env};
+mod day1;
 
-fn day1(input: Vec<String>) -> (i64, i64) {
-    (0, 0)
-}
+use std::{collections::HashMap, env};
 
 type DayFunction = fn(Vec<String>) -> (i64, i64);
 fn main() {
     let mut solutions: HashMap<usize, DayFunction> = HashMap::new();
-    solutions.insert(1, day1);
+    solutions.insert(1, day1::day1);
 
     // Get user input
     let args: Vec<String> = env::args().collect();
