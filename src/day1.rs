@@ -1,10 +1,10 @@
 pub fn day1(input: Vec<String>) -> (i64, i64) {
-    let input = input
+    let input: Vec<i64> = input
         .iter()
         .map(|i| i.parse())
         .filter_map(Result::ok)
         .collect();
-    (part1(input), 0)
+    (part1(input.clone()), part2(input))
 }
 
 fn part1(input: Vec<i64>) -> i64 {
