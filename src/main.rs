@@ -1,21 +1,19 @@
 mod day1;
+mod day2;
+mod intcode;
+mod opcode;
+mod util;
 
-use std::io::Read;
-use std::{collections::HashMap, env, fs::File, io::Error};
+use std::{collections::HashMap, env};
+
+use util::read_data;
 
 type DayFunction = fn(Vec<String>) -> (i64, i64);
 
-fn read_data(input_file: String) -> Result<Vec<String>, Error> {
-    let mut input = String::new();
-
-    let mut file = File::open(input_file)?;
-    file.read_to_string(&mut input)?;
-    let lines = input.split('\n').map(|s: &str| s.to_string()).collect();
-    Ok(lines)
-}
 fn main() {
     let mut solutions: HashMap<usize, DayFunction> = HashMap::new();
     solutions.insert(1, day1::day1);
+    solutions.insert(2, day2::day2);
 
     // Get user input
     let args: Vec<String> = env::args().collect();
@@ -32,9 +30,10 @@ fn main() {
         None => panic!("Can't find day definition for day: {}", day),
     };
 
-    let input = match read_data(format!("input/{}.txt", day)) {
+    let filename = format!("input/{}.txt", day);
+    let input = match read_data(&filename) {
         Ok(input) => input,
-        Err(e) => panic!("Can't read file: {}", e),
+        Err(e) => panic!("Can't read file: {} -> {}", filename, e),
     };
 
     let (part1, part2) = day_function(input);
