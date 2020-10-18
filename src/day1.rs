@@ -1,4 +1,4 @@
-pub fn day1(input: Vec<String>) -> (i64, i64) {
+pub fn day1(input: &[String]) -> (i64, i64) {
     let input: Vec<i64> = input
         .iter()
         .map(|i| i.parse())
