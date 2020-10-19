@@ -22,6 +22,45 @@ enum Direction {
     Down,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct Point {
+    x: i64,
+    y: i64,
+}
+
+fn get_points(start: (i32, i32), input: &[WirePath]) -> Vec<Point> {
+    input
+        .iter()
+        .fold(Vec::new(), |mut arr: Vec<Point>, i: &WirePath| {
+            let mut last_position = if !arr.is_empty() {
+                arr.last().unwrap()
+            } else {
+                arr.push(Point { x: 0, y: 0 });
+                arr.last().unwrap()
+            };
+
+            match i.direction {
+                Direction::Right => {
+                    for _ in 0..i.steps {
+                        let p = Point {
+                            x: last_position.x + 1,
+                            y: last_position.y,
+                        };
+
+                        arr.push(p);
+                        println!("Crap: {:?}", arr);
+                        last_position = arr.last().unwrap();
+                    }
+                }
+
+                Direction::Left => {}
+                Direction::Up => {}
+                Direction::Down => {}
+            }
+            arr
+        })
+}
+
 #[derive(Debug, PartialEq)]
 struct WirePath {
     direction: Direction,
@@ -72,6 +111,21 @@ mod tests {
 
             let distance = calc_shortest_distance(input);
             assert_eq!(distance, 135);
+        }
+    }
+
+    mod points {
+        use crate::day3::{get_points, Direction, Point, WirePath};
+
+        #[test]
+        fn test_get_points() {
+            let input = &[WirePath {
+                direction: Direction::Right,
+                steps: 1,
+            }];
+            let start = (0, 0);
+            let points = get_points(start, input);
+            assert_eq!(points, vec![Point { x: 0, y: 0 }, Point { x: 1, y: 0 },])
         }
     }
 
