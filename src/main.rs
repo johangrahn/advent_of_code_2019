@@ -7,9 +7,7 @@ mod opcode;
 mod util;
 
 use std::{collections::HashMap, env};
-
 use util::read_data;
-
 type DayFunction = fn(&[String]) -> (i64, i64);
 
 fn main() {
