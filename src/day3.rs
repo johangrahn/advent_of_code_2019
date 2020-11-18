@@ -8,74 +8,31 @@ fn part1(input: &[String]) -> i64 {
     let paths = input
         .iter()
         .map(|i| {
-            println!("{}", i);
             let instructions = i.split(",").collect::<Vec<_>>();
-            println!("{:?}", instructions);
-
             let routes = instructions.iter().map(parse_route).collect::<Vec<Route>>();
-            println!("{:?}", routes);
-
-            let mut current_point = Point {
-                x: 0,
-                y: 0,
-                steps: 0,
-            };
+            let mut current_point = Point::default();
 
             let points = routes
                 .iter()
-                .flat_map(|r| match r.direction {
-                    Direction::Right => {
-                        let mut list = vec![];
-                        for _ in 0..r.steps {
-                            let p = Point {
-                                x: current_point.x + 1,
-                                y: current_point.y,
-                                steps: current_point.steps + 1,
-                            };
-                            list.push(p);
-                            current_point = p;
-                        }
-                        list
+                .flat_map(|r| {
+                    let mut points: Vec<Point> = Vec::new();
+                    let (dx, dy) = match r.direction {
+                        Direction::Right => (1, 0),
+                        Direction::Left => (-1, 0),
+                        Direction::Up => (0, 1),
+                        Direction::Down => (0, -1),
+                    };
+
+                    for _ in 0..r.steps {
+                        let p = Point {
+                            x: current_point.x + dx,
+                            y: current_point.y + dy,
+                            steps: current_point.steps + 1,
+                        };
+                        points.push(p);
+                        current_point = p;
                     }
-                    Direction::Left => {
-                        let mut list = vec![];
-                        for _ in 0..r.steps {
-                            let p = Point {
-                                x: current_point.x - 1,
-                                y: current_point.y,
-                                steps: current_point.steps + 1,
-                            };
-                            list.push(p);
-                            current_point = p;
-                        }
-                        list
-                    }
-                    Direction::Up => {
-                        let mut list = vec![];
-                        for _ in 0..r.steps {
-                            let p = Point {
-                                x: current_point.x,
-                                y: current_point.y + 1,
-                                steps: current_point.steps + 1,
-                            };
-                            list.push(p);
-                            current_point = p;
-                        }
-                        list
-                    }
-                    Direction::Down => {
-                        let mut list = vec![];
-                        for _ in 0..r.steps {
-                            let p = Point {
-                                x: current_point.x,
-                                y: current_point.y - 1,
-                                steps: current_point.steps + 1,
-                            };
-                            list.push(p);
-                            current_point = p;
-                        }
-                        list
-                    }
+                    points
                 })
                 .collect::<HashSet<Point>>();
 
@@ -93,6 +50,15 @@ struct Point {
     steps: i64,
 }
 
+impl Default for Point {
+    fn default() -> Self {
+        Self {
+            x: 0,
+            y: 0,
+            steps: 0,
+        }
+    }
+}
 impl PartialEq for Point {
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && self.y == other.y
