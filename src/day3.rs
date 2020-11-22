@@ -1,11 +1,33 @@
-use std::{collections::HashSet, hash::Hash};
+use crate::point::Point;
+use std::collections::HashSet;
 
 pub fn day3(input: &[String]) -> (i64, i64) {
-    (part1(input), 0)
+    (part1(input), part2(input))
 }
 
 fn part1(input: &[String]) -> i64 {
-    let paths = input
+    let paths = get_paths(input);
+    let intersections = paths[0].intersection(&paths[1]);
+    intersections.map(|p| p.x.abs() + p.y.abs()).min().unwrap()
+}
+
+fn part2(input: &[String]) -> i64 {
+    let paths = get_paths(input);
+    let intersections = paths[0].intersection(&paths[1]);
+
+    let smallest_steps = intersections
+        .map(|p| {
+            let p1 = paths[0].get(p).unwrap();
+            let p2 = paths[1].get(p).unwrap();
+            p1.steps + p2.steps
+        })
+        .min()
+        .unwrap();
+    smallest_steps
+}
+
+fn get_paths(input: &[String]) -> Vec<HashSet<Point>> {
+    input
         .iter()
         .map(|i| {
             let instructions = i.split(",").collect::<Vec<_>>();
@@ -38,37 +60,7 @@ fn part1(input: &[String]) -> i64 {
 
             points
         })
-        .collect::<Vec<HashSet<Point>>>();
-
-    let intersection = paths[0].intersection(&paths[1]);
-    intersection.map(|p| p.x.abs() + p.y.abs()).min().unwrap()
-}
-#[derive(Debug, Copy, Clone, Eq)]
-struct Point {
-    x: i64,
-    y: i64,
-    steps: i64,
-}
-
-impl Default for Point {
-    fn default() -> Self {
-        Self {
-            x: 0,
-            y: 0,
-            steps: 0,
-        }
-    }
-}
-impl PartialEq for Point {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y
-    }
-}
-impl Hash for Point {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.x.hash(state);
-        self.y.hash(state);
-    }
+        .collect::<Vec<HashSet<Point>>>()
 }
 
 #[derive(Debug)]
@@ -99,3 +91,4 @@ fn parse_route(instruction: &&str) -> Route {
 
     Route { direction, steps }
 }
+    

@@ -1,6 +1,7 @@
 mod day1;
 mod day2;
 mod day3;
+mod point;
 
 mod intcode;
 mod opcode;
@@ -41,4 +42,24 @@ fn main() {
 
     println!("Running day {}", day);
     println!("Part1: {}, Part2: {}", part1, part2)
+}
+
+#[cfg(test)]
+mod day3_tests {
+    
+    #[test]
+    fn day3_part1() {
+        use crate::util::read_data;
+        let input = read_data("input/3.txt").unwrap();
+        let (part1, _) = crate::day3::day3(&input);
+        assert_eq!(part1, 1225)
+    }
+    
+    #[test]
+    fn day3_part2() {
+        use crate::util::read_data;
+        let input = read_data("input/3.txt").unwrap();
+        let (_, part2) = crate::day3::day3(&input);
+        assert_eq!(part2, 107036)
+    }
 }
