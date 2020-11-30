@@ -31,7 +31,10 @@ fn get_paths(input: &[String]) -> Vec<HashSet<Point>> {
         .iter()
         .map(|i| {
             let instructions = i.split(",").collect::<Vec<_>>();
-            let routes = instructions.iter().map(parse_route).collect::<Vec<Route>>();
+            let routes = instructions
+                .iter()
+                .map(Route::parse_route)
+                .collect::<Vec<Route>>();
             let mut current_point = Point::default();
 
             let points = routes
@@ -76,19 +79,19 @@ struct Route {
     steps: usize,
 }
 
-fn parse_route(instruction: &&str) -> Route {
-    let dir = instruction.chars().next().unwrap();
+impl Route {
+    fn parse_route(instruction: &&str) -> Route {
+        let dir = instruction.chars().next().unwrap();
 
-    let direction = match dir {
-        'R' => Direction::Right,
-        'L' => Direction::Left,
-        'U' => Direction::Up,
-        'D' => Direction::Down,
-        _ => panic!("You fucked up"),
-    };
+        let direction = match dir {
+            'R' => Direction::Right,
+            'L' => Direction::Left,
+            'U' => Direction::Up,
+            'D' => Direction::Down,
+            _ => panic!("You fucked up"),
+        };
 
-    let steps = instruction[1..].parse::<usize>().unwrap();
-
-    Route { direction, steps }
+        let steps = instruction[1..].parse::<usize>().unwrap();
+        Route { direction, steps }
+    }
 }
-    
