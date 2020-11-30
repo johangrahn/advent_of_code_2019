@@ -1,6 +1,8 @@
 mod day1;
 mod day2;
 mod day3;
+mod day4;
+
 mod point;
 
 mod intcode;
@@ -16,6 +18,7 @@ fn main() {
     solutions.insert(1, day1::day1);
     solutions.insert(2, day2::day2);
     solutions.insert(3, day3::day3);
+    solutions.insert(4, day4::day4);
 
     // Get user input
     let args: Vec<String> = env::args().collect();
@@ -46,7 +49,7 @@ fn main() {
 
 #[cfg(test)]
 mod day3_tests {
-    
+
     #[test]
     fn day3_part1() {
         use crate::util::read_data;
@@ -54,7 +57,7 @@ mod day3_tests {
         let (part1, _) = crate::day3::day3(&input);
         assert_eq!(part1, 1225)
     }
-    
+
     #[test]
     fn day3_part2() {
         use crate::util::read_data;
